@@ -1,1 +1,35 @@
+local Window = Rayfield:CreateWindow({
+Name = "Dev mode",
+Icon = "bird", 
+LoaingTitle = "Bird Hub",
+LoadingSubtitle = "by B1RD",
+Theme = "Default",
+      
+DisableRayfieldPrompts = false,
+DisableBuildWarnings = false,
+      
+ConfigurationSaving = {
+  Enabled = false,
+   FolderName = "BirdHub!",
+  FileName = "Bird Hub!"
+},
+      
+Discord = {
+  Enabled = false,
+  Invite = "noinvitelink", 
+  RememberJoins = true
+ },
+      
+KeySystem = true, 
+KeySettings = {
+  Title = "DevKey Required",
+  Subtitle = "",
+  Note = "DEVKEY NEEDED FOR FULL ACCESS", 
+  FileName = "DEVKEY", 
+  SaveKey = true, 
+  GrabKeyFromSite = false, 
+  Key = {"1003001003001"} 
+ }
+})
+
 
