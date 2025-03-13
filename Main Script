@@ -32,4 +32,5 @@ KeySettings = {
  }
 })
 
-
+local tab = Window:CreateTab ("Dev Stuff")
+local section = Window:CreateSection ("Dev Console")
