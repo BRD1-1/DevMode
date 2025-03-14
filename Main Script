@@ -67,8 +67,12 @@ local TesFeaTab = Window:CreateTab("Test Features")
 local TestSection = TesFeaTab:CreateSection("Test Features")
 
 local button = TesFeaTab:CreateButton({
-    Name = "Test Button",
+    Name = "teleport up 100 studs",
     Callback = function()
-        print("TAB WORKS SIGMA")
+        local player = game.Players.LocalPlayer
+        local character = player.Character
+        if character and character:FindFirstChild("HumanoidRootPart") then
+            character.HumanoidRootPart.CFrame = character.HumanoidRootPart.CFrame + Vector3.new(0, 100, 0)
+        end
     end
 })
