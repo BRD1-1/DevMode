@@ -119,70 +119,60 @@ local Toggle = MainTab:CreateToggle({
 
 local AvoSection = MaintTab:CreateSection("Auto Avoid")
 
-local AutoAvoid = false
-
 local Toggle = MainTab:CreateToggle({ 
    Name = "Auto Avoid", 
    CurrentValue = false,
    Flag = "AvMurd1", 
    Callback = function(Value)
-       AutoAvoid = Value
-   end,
-})
-
-game:GetService("RunService").Heartbeat:Connect(function()
-   if AutoAvoid then
-       for _, player in pairs(game.Players:GetPlayers()) do
-           if player.Character then
-               local backpack = player:FindFirstChild("Backpack")
-               
-               for _, tool in pairs(player.Character:GetChildren()) do
-                   if tool:IsA("Tool") and tool.Name:lower() == "knife" then
-                       local murderer = player.Character:FindFirstChild("HumanoidRootPart")
-                       if murderer and game.Players.LocalPlayer.Character then
-                           local localRoot = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                           if localRoot then
-                               if (localRoot.Position - murderer.Position).magnitude <= 10 then
-                                   localRoot.CFrame = localRoot.CFrame + Vector3.new(0, 100, 0)
+       if Value then
+           local connection
+           connection = game:GetService("RunService").Heartbeat:Connect(function()
+               for _, player in pairs(game.Players:GetPlayers()) do
+                   if player.Character then
+                       local backpack = player:FindFirstChild("Backpack")
+                       
+                       for _, tool in pairs(player.Character:GetChildren()) do
+                           if tool:IsA("Tool") and tool.Name:lower() == "knife" then
+                               local murderer = player.Character:FindFirstChild("HumanoidRootPart")
+                               if murderer and game.Players.LocalPlayer.Character then
+                                   local localRoot = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                                   if localRoot then
+                                       if (localRoot.Position - murderer.Position).magnitude <= 10 then
+                                           localRoot.CFrame = localRoot.CFrame + Vector3.new(0, 100, 0)
+                                       end
+                                   end
                                end
                            end
                        end
-                   end
-               end
-               
-               if backpack then
-                   for _, tool in pairs(backpack:GetChildren()) do
-                       if tool:IsA("Tool") and tool.Name:lower() == "knife" then
-                           local murderer = player.Character:FindFirstChild("HumanoidRootPart")
-                           if murderer and game.Players.LocalPlayer.Character then
-                               local localRoot = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                               if localRoot then
-                                   if (localRoot.Position - murderer.Position).magnitude <= 10 then
-                                       localRoot.CFrame = localRoot.CFrame + Vector3.new(0, 100, 0)
+                       
+                       if backpack then
+                           for _, tool in pairs(backpack:GetChildren()) do
+                               if tool:IsA("Tool") and tool.Name:lower() == "knife" then
+                                   local murderer = player.Character:FindFirstChild("HumanoidRootPart")
+                                   if murderer and game.Players.LocalPlayer.Character then
+                                       local localRoot = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                                       if localRoot then
+                                           if (localRoot.Position - murderer.Position).magnitude <= 10 then
+                                               localRoot.CFrame = localRoot.CFrame + Vector3.new(0, 100, 0)
+                                           end
+                                       end
                                    end
                                end
                            end
                        end
                    end
                end
+           end)
+           
+           Toggle.Callback = function(Value)
+               if not Value and connection then
+                   connection:Disconnect()
+               end
            end
        end
-   end
-end)
-
-
-local TpSection = MainTab:CreateSection("Misc")
-
-local button = MainTab:CreateButton({
-    Name = "teleport up 100 studs",
-    Callback = function()
-        local player = game.Players.LocalPlayer
-        local character = player.Character
-        if character and character:FindFirstChild("HumanoidRootPart") then
-            character.HumanoidRootPart.CFrame = character.HumanoidRootPart.CFrame + Vector3.new(0, 100, 0)
-        end
-    end
+   end,
 })
+
 
 local button = MainTab:CreateButton({
     Name = "Unban VC",
