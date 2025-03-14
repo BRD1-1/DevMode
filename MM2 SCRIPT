@@ -124,49 +124,47 @@ local Toggle = MainTab:CreateToggle({
    CurrentValue = false,
    Flag = "AvMurd1", 
    Callback = function(Value)
-       AutoAvoid = Value
-   end,
-})
-
-game:GetService("RunService").Heartbeat:Connect(function()
-   if AutoAvoid then
-       for _, player in pairs(game.Players:GetPlayers()) do
-           if player.Character then
-               local backpack = player:FindFirstChild("Backpack")
-               
-               for _, tool in pairs(player.Character:GetChildren()) do
-                   if tool:IsA("Tool") and tool.Name:lower() == "knife" then
-                       local murderer = player.Character:FindFirstChild("HumanoidRootPart")
-                       if murderer and game.Players.LocalPlayer.Character then
-                           local localRoot = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                           if localRoot then
-                               if (localRoot.Position - murderer.Position).magnitude <= 10 then
-                                   localRoot.CFrame = localRoot.CFrame + Vector3.new(0, 100, 0)
+       if Value then
+           game:GetService("RunService").Heartbeat:Connect(function()
+               for _, player in pairs(game.Players:GetPlayers()) do
+                   if player.Character then
+                       local backpack = player:FindFirstChild("Backpack")
+                       
+                       for _, tool in pairs(player.Character:GetChildren()) do
+                           if tool:IsA("Tool") and tool.Name:lower() == "knife" then
+                               local murderer = player.Character:FindFirstChild("HumanoidRootPart")
+                               if murderer and game.Players.LocalPlayer.Character then
+                                   local localRoot = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                                   if localRoot then
+                                       if (localRoot.Position - murderer.Position).magnitude <= 10 then
+                                           localRoot.CFrame = localRoot.CFrame + Vector3.new(0, 100, 0)
+                                       end
+                                   end
                                end
                            end
                        end
-                   end
-               end
-               
-               if backpack then
-                   for _, tool in pairs(backpack:GetChildren()) do
-                       if tool:IsA("Tool") and tool.Name:lower() == "knife" then
-                           local murderer = player.Character:FindFirstChild("HumanoidRootPart")
-                           if murderer and game.Players.LocalPlayer.Character then
-                               local localRoot = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                               if localRoot then
-                                   if (localRoot.Position - murderer.Position).magnitude <= 10 then
-                                       localRoot.CFrame = localRoot.CFrame + Vector3.new(0, 100, 0)
+                       
+                       if backpack then
+                           for _, tool in pairs(backpack:GetChildren()) do
+                               if tool:IsA("Tool") and tool.Name:lower() == "knife" then
+                                   local murderer = player.Character:FindFirstChild("HumanoidRootPart")
+                                   if murderer and game.Players.LocalPlayer.Character then
+                                       local localRoot = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                                       if localRoot then
+                                           if (localRoot.Position - murderer.Position).magnitude <= 10 then
+                                               localRoot.CFrame = localRoot.CFrame + Vector3.new(0, 100, 0)
+                                           end
+                                       end
                                    end
                                end
                            end
                        end
                    end
                end
-           end
+           end)
        end
-   end
-end)
+   end,
+})
 
 
 local TpSection = MainTab:CreateSection("Misc")
