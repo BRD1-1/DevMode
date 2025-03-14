@@ -251,9 +251,17 @@ local button = SettingTab:CreateButton({
 })
 
 
-local section = SettingTab:CreateSection("Dev Mode")
+local section = SettingTab:CreateSection("Load Scripts")
+
 local Button = SettingTab:CreateButton({
-   Name = "Dev Mode",
+   Name = "Reload Script",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/BRD1-1/DevMode/refs/heads/main/MM2%20SCRIPT", true))()
+   end
+})
+
+local Button = SettingTab:CreateButton({
+   Name = "Dev Mode Script",
    Callback = function()
       loadstring(game:HttpGet("https://raw.githubusercontent.com/BRD1-1/DevMode/refs/heads/main/Main%20Script", true))()
    end
