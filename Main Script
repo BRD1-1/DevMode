@@ -45,4 +45,4 @@ local button = DevTab:CreateButton({
     end
 })
 
-local DevSection = Tab:CreateSection ("Dev Console")
+local DevSection = DevTab:CreateSection ("Dev Console")
