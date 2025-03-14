@@ -105,11 +105,26 @@ local Toggle = MainTab:CreateToggle({
    end
 })
 
-local DetSection = MainTab:CreateSection("Detection & Callout")
+local TpSection = MainTab:CreateSection("TP")
+
+local button = MainTab:CreateButton({
+    Name = "teleport up 100 studs",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local character = player.Character
+        if character and character:FindFirstChild("HumanoidRootPart") then
+            character.HumanoidRootPart.CFrame = character.HumanoidRootPart.CFrame + Vector3.new(0, 100, 0)
+        end
+    end
+})
+
+local DetTab = Window:CreateTab("Detection & Callout")
+
+local DetSection = DetTab:CreateSection("Detection")
 
 -- Creates Detect Murderer
 
-local Button = MainTab:CreateButton({
+local Button = DetTab:CreateButton({
    Name = "Detect Murderer",
    Callback = function()
        task.spawn(function()
@@ -157,7 +172,7 @@ local Button = MainTab:CreateButton({
 
 -- Creates Detect Sheriff
 
-local Button = MainTab:CreateButton({
+local Button = DetTab:CreateButton({
    Name = "Detect Sheriff",
    Callback = function()
        task.spawn(function()
@@ -202,9 +217,13 @@ local Button = MainTab:CreateButton({
    end,
 })
 
+--creates callout section
+
+local CalSection = DetTab:CreateSection("Callouts")
+
 -- creates callout murderer
 
-local Button = MainTab:CreateButton({
+local Button = DetTab:CreateButton({
     Name = "Callout Murderer",
     Callback = function()
         task.spawn(function()
@@ -241,7 +260,7 @@ local Button = MainTab:CreateButton({
 
 -- creates call out sheriff
 
- local Button = MainTab:CreateButton({
+ local Button = DetTab:CreateButton({
     Name = "Callout Sheriff",
     Callback = function()
         task.spawn(function()
@@ -275,19 +294,6 @@ local Button = MainTab:CreateButton({
         end)
     end,
  })
-
-local TpSection = MainTab:CreateSection("TP")
-
-local button = MainTab:CreateButton({
-    Name = "teleport up 100 studs",
-    Callback = function()
-        local player = game.Players.LocalPlayer
-        local character = player.Character
-        if character and character:FindFirstChild("HumanoidRootPart") then
-            character.HumanoidRootPart.CFrame = character.HumanoidRootPart.CFrame + Vector3.new(0, 100, 0)
-        end
-    end
-})
 
 -- Creates Settings Tab
 
