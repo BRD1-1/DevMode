@@ -361,8 +361,7 @@ local button = SettingTab:CreateButton({
         local MainFrame = Instance.new("Frame")
         local UICornerMain = Instance.new("UICorner")
         local Title = Instance.new("TextLabel")
-        local EnableButton = Instance.new("TextButton")
-        local UICornerButton = Instance.new("UICorner")
+        local StatusLabel = Instance.new("TextLabel")
         local TimerLabel = Instance.new("TextLabel")
         local UICornerTimer = Instance.new("UICorner")
 
@@ -372,7 +371,7 @@ local button = SettingTab:CreateButton({
         MainFrame.Parent = ScreenGui
         MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
         MainFrame.Size = UDim2.new(0, 200, 0, 120)
-        MainFrame.Position = UDim2.new(0.5, -100, 0, 10)
+        MainFrame.Position = UDim2.new(0.5, -100, 0, 50) -- Moved down slightly
         MainFrame.BorderSizePixel = 0
 
         UICornerMain.Parent = MainFrame
@@ -386,17 +385,14 @@ local button = SettingTab:CreateButton({
         Title.Size = UDim2.new(1, 0, 0, 25)
         Title.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 
-        EnableButton.Parent = MainFrame
-        EnableButton.Text = "Anti AFK Enabled"
-        EnableButton.Font = Enum.Font.SourceSansBold
-        EnableButton.TextSize = 16
-        EnableButton.Size = UDim2.new(1, -20, 0, 35)
-        EnableButton.Position = UDim2.new(0, 10, 0, 35)
-        EnableButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-        EnableButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-
-        UICornerButton.Parent = EnableButton
-        UICornerButton.CornerRadius = UDim.new(0, 8)
+        StatusLabel.Parent = MainFrame
+        StatusLabel.Text = "Anti AFK Enabled"
+        StatusLabel.Font = Enum.Font.SourceSansBold
+        StatusLabel.TextSize = 16
+        StatusLabel.Size = UDim2.new(1, -20, 0, 35)
+        StatusLabel.Position = UDim2.new(0, 10, 0, 35)
+        StatusLabel.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        StatusLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 
         TimerLabel.Parent = MainFrame
         TimerLabel.Text = "Time Active: 0s"
@@ -410,9 +406,7 @@ local button = SettingTab:CreateButton({
         UICornerTimer.Parent = TimerLabel
         UICornerTimer.CornerRadius = UDim.new(0, 8)
 
-        local active = true
         local startTime = tick()
-
         local vu = game:GetService("VirtualUser")
         game:GetService("Players").LocalPlayer.Idled:Connect(function()
             vu:CaptureController()
@@ -420,19 +414,9 @@ local button = SettingTab:CreateButton({
         end)
 
         spawn(function()
-            while active do
+            while true do
                 TimerLabel.Text = "Time Active: " .. math.floor(tick() - startTime) .. "s"
                 wait(1)
-            end
-        end)
-
-        EnableButton.MouseButton1Click:Connect(function()
-            active = not active
-            if active then
-                startTime = tick()
-                EnableButton.Text = "Anti AFK Enabled"
-            else
-                EnableButton.Text = "Anti AFK Disabled"
             end
         end)
     end
