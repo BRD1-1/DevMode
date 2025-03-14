@@ -68,35 +68,36 @@ local Toggle = MainTab:CreateToggle({
 
        local running = true  
 
-       local function getCoins()
-           local coins = {}
+       local function getClosestCoin()
+           local closestCoin = nil
+           local minDistance = math.huge
            for _, obj in pairs(workspace:GetDescendants()) do
                if obj:IsA("BasePart") and obj.Name == "Coin_Server" then
-                   table.insert(coins, obj)
+                   local distance = (humanoidRootPart.Position - obj.Position).Magnitude
+                   if distance < minDistance then
+                       minDistance = distance
+                       closestCoin = obj
+                   end
                end
            end
-           return coins
+           return closestCoin
        end
 
        local function teleportToCoin(target)
            if not target or not target.Parent then return end
            humanoidRootPart.CFrame = target.CFrame + Vector3.new(0, 2, 0)
-           task.wait(0.1)
+           task.wait(1) 
        end
 
        task.spawn(function()
            while Value do 
                if not running then return end
 
-               local coins = getCoins()
-               for _, coin in pairs(coins) do
-                   if not running then return end
-                   if coin and coin.Parent then
-                       teleportToCoin(coin)
-                   end
-                   task.wait(0.2)
+               local closestCoin = getClosestCoin()
+               if closestCoin then
+                   teleportToCoin(closestCoin)
                end
-               task.wait(0.5)
+               task.wait(2) 
            end
        end)
 
@@ -105,6 +106,7 @@ local Toggle = MainTab:CreateToggle({
        end
    end
 })
+
 
 local TpSection = MainTab:CreateSection("Misc")
 
