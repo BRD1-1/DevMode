@@ -2,8 +2,8 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
 Name = "Dev mode",
-Icon = "bird", 
-LoaingTitle = "Bird Hub",
+Icon = "binary", 
+LoaingTitle = "Dev Mode",
 LoadingSubtitle = "by B1RD",
 Theme = "Default",
       
