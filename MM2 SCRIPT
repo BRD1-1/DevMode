@@ -57,7 +57,7 @@ local Toggle = MainTab:CreateToggle({
    Callback = function(Value)
         Rayfield:Notify({
          Title = "Auto Coin " .. (Value and "Enabled" or "Disabled"),
-         Content = Value and "If you are afking with this we recommend using white screen to reduce lag." or "Auto Coin has been disabled.",
+         Content = Value and "If you are AFKing, we recommend using a white screen to reduce lag." or "Auto Coin has been disabled.",
          Duration = 6.5,
          Image = "coins",
          })
@@ -66,7 +66,7 @@ local Toggle = MainTab:CreateToggle({
        local character = player.Character or player.CharacterAdded:Wait()
        local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
-       local running = true  -- Variable to track running state
+       local running = true  
 
        local function getCoins()
            local coins = {}
@@ -78,45 +78,41 @@ local Toggle = MainTab:CreateToggle({
            return coins
        end
 
-       local function flyTo(target)
-           if not target or not target.Parent then return end -- Ensure target still exists
-           
+       local function moveToCoin(target)
+           if not target or not target.Parent then return end 
+
            local tweenService = game:GetService("TweenService")
            local distance = (humanoidRootPart.Position - target.Position).Magnitude
-           local tweenInfo = TweenInfo.new(distance / 75, Enum.EasingStyle.Linear)
-           local goal = {Position = target.Position + Vector3.new(0, 2, 0)}
+           local tweenInfo = TweenInfo.new(distance / 100, Enum.EasingStyle.Linear) 
+           local goal = {Position = target.Position} 
            local tween = tweenService:Create(humanoidRootPart, tweenInfo, goal)
 
            tween:Play()
            tween.Completed:Wait()
 
-           if not running then return end -- Check again before final move
-
-           local finalMove = TweenInfo.new(0.5, Enum.EasingStyle.Linear)
-           local finalGoal = {Position = target.Position}
-           local finalTween = tweenService:Create(humanoidRootPart, finalMove, finalGoal)
-           finalTween:Play()
-           finalTween.Completed:Wait()
+           if running then
+               task.wait(0.2)
+           end
        end
 
        task.spawn(function()
            while Value do 
-               if not running then return end -- Exit loop if disabled
-               
+               if not running then return end 
+
                local coins = getCoins()
                for _, coin in pairs(coins) do
-                   if not running then return end -- Exit mid-loop if disabled
+                   if not running then return end 
                    if coin and coin.Parent then
-                       flyTo(coin)
+                       moveToCoin(coin)
                    end
-                   task.wait(0.5)
+                   task.wait(0.2)
                end
-               task.wait(1)
+               task.wait(0.5)
            end
        end)
 
        if not Value then
-           running = false -- Stop the loop
+           running = false
        end
    end
 })
