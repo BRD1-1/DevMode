@@ -54,16 +54,3 @@ local button = SettingTab:CreateButton({
         print("B1RD ON TOP")
     end
 })
-
-local Input = SettingTab:CreateInput({
-    Name = "Test Print",
-    CurrentValue = "",
-    PlaceholderText = "Sigma",
-    RemoveTextAfterFocusLost = false,
-    Flag = "TestPrint1",
-    Callback = function(Text)
-        while true do
-            print(Text)
-        end
-    end,
- })
