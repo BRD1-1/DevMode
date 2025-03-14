@@ -55,5 +55,5 @@ local button = SettingTab:CreateButton({
     end
 })
 
-local TestFeatureTab = window:createtab("Test Features")
+local TestFeatureTab = Window:createtab("Test Features")
 local TestSection = TestFeatureTab:CreateSection("Test Features")
