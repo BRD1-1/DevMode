@@ -45,4 +45,25 @@ local button = SettingTab:CreateButton({
     end
 })
 
-local DevSection = SettingTab:CreateSection ("Dev Console")
+local DevSection = SettingTab:CreateSection("Dev Console")
+
+local button = SettingTab:CreateButton({
+    Name = "Dev Console",
+    Callback = function()
+        game:GetService("StarterGui"):SetCore("DevConsoleVisible", true)
+        print("B1RD ON TOP")
+    end
+})
+
+local Input = SettingTab:CreateInput({
+    Name = "Test Print",
+    CurrentValue = "",
+    PlaceholderText = "Sigma",
+    RemoveTextAfterFocusLost = false,
+    Flag = "TestPrint1",
+    Callback = function(Text)
+        while true do
+            print(Text)
+        end
+    end,
+ })
