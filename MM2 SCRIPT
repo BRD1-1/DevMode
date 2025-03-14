@@ -86,7 +86,7 @@ local Toggle = MainTab:CreateToggle({
        local function teleportToCoin(target)
            if not target or not target.Parent then return end
            humanoidRootPart.CFrame = target.CFrame + Vector3.new(0, 2, 0)
-           task.wait(math.random(0.5, 1)) 
+           task.wait(math.random(0.25, 0.5))  
        end
 
        task.spawn(function()
@@ -97,7 +97,7 @@ local Toggle = MainTab:CreateToggle({
                if closestCoin then
                    teleportToCoin(closestCoin)
                end
-               task.wait(math.random(2, 4)) 
+               task.wait(math.random(0.25, 0.5)) 
            end
        end)
 
