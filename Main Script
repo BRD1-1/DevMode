@@ -38,11 +38,11 @@ local tab = Window:CreateTab ("Dev Stuff")
 
 local DesSection = tab:CreateSection ("Destroy interface")
 
-local button = tab:CreateButton({
-      Name = "Destroy Interface"
-      Callback = Function()
-            Rayfield:Destroy()
-      end
+local button = Tab:CreateButton({
+    Name = "Destroy Interface",
+    Callback = function()
+        Rayfield:Destroy()
+    end
 })
 
 local DevSection = Tab:CreateSection ("Dev Console")
