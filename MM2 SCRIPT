@@ -105,7 +105,7 @@ local Toggle = MainTab:CreateToggle({
    end
 })
 
-local DetSection = MainTab:CreateSection("Detection")
+local DetSection = MainTab:CreateSection("Detection & Callout")
 
 -- Creates Detect Murderer
 
@@ -201,6 +201,80 @@ local Button = MainTab:CreateButton({
        end)
    end,
 })
+
+-- creates callout murderer
+
+local Button = MainTab:CreateButton({
+    Name = "Callout Murderer",
+    Callback = function()
+        task.spawn(function()
+            for _, player in pairs(game.Players:GetPlayers()) do
+                if player.Character then
+                    local backpack = player:FindFirstChild("Backpack")
+                    
+                    for _, tool in pairs(player.Character:GetChildren()) do
+                        if tool:IsA("Tool") and tool.Name:lower() == "knife" then
+                            game:GetService("TextChatService").TextChannels:WaitForChild("RBXGeneral"):SendAsync(player.Name .. " is the murderer!")
+                            return
+                        end
+                    end
+ 
+                    if backpack then
+                        for _, tool in pairs(backpack:GetChildren()) do
+                            if tool:IsA("Tool") and tool.Name:lower() == "knife" then
+                                game:GetService("TextChatService").TextChannels:WaitForChild("RBXGeneral"):SendAsync(player.Name .. " is the murderer!")
+                                return
+                            end
+                        end
+                    end
+                end
+            end
+            Rayfield:Notify({
+                Title = "No Murderer Found",
+                Content = "No player with a knife was detected.",
+                Duration = 6.5,
+                Image = "Slice",
+            })
+        end)
+    end,
+ })
+
+-- creates call out sheriff
+
+ local Button = MainTab:CreateButton({
+    Name = "Callout Sheriff",
+    Callback = function()
+        task.spawn(function()
+            for _, player in pairs(game.Players:GetPlayers()) do
+                if player.Character then
+                    local backpack = player:FindFirstChild("Backpack")
+                    
+                    for _, tool in pairs(player.Character:GetChildren()) do
+                        if tool:IsA("Tool") and tool.Name:lower() == "gun" then
+                            game:GetService("TextChatService").TextChannels:WaitForChild("RBXGeneral"):SendAsync(player.Name .. " is the sheriff!")
+                            return
+                        end
+                    end
+ 
+                    if backpack then
+                        for _, tool in pairs(backpack:GetChildren()) do
+                            if tool:IsA("Tool") and tool.Name:lower() == "gun" then
+                                game:GetService("TextChatService").TextChannels:WaitForChild("RBXGeneral"):SendAsync(player.Name .. " is the Sheriff!")
+                                return
+                            end
+                        end
+                    end
+                end
+            end
+            Rayfield:Notify({
+                Title = "No Sheriff Found",
+                Content = "No player with a gun was detected.",
+                Duration = 6.5,
+                Image = "Drill",
+            })
+        end)
+    end,
+ })
 
 local TpSection = MainTab:CreateSection("TP")
 
