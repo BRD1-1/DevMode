@@ -34,15 +34,15 @@ KeySettings = {
  }
 })
 
-local DevTab = Window:CreateTab ("Dev Stuff")
+local SettingTab = Window:CreateTab ("Dev Stuff")
 
-local DesSection = DevTab:CreateSection ("Destroy interface")
+local DevSection =  SettingTab:CreateSection("Destroy Interface")
 
-local button = DevTab:CreateButton({
+local button = SettingTab:CreateButton({
     Name = "Destroy Interface",
     Callback = function()
         Rayfield:Destroy()
     end
 })
 
-local DevSection = DevTab:CreateSection ("Dev Console")
+local DevSection = SettingTab:CreateSection ("Dev Console")
