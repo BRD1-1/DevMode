@@ -39,7 +39,7 @@ local Window = Rayfield:CreateWindow({
 Rayfield:Notify({
     Title = "Welcome",
     Content = "B1RD Hub has succesfully been executed. Enjoy!",
-    Duration = 3,
+    Duration = 6.5,
     Image = "bird",
  })
 
@@ -63,49 +63,49 @@ local Toggle = MainTab:CreateToggle({
          })
 
        local player = game.Players.LocalPlayer
-       local character = player.Character or player.CharacterAdded:Wait()
-       local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
-       local running = true  
+       local function startAutoCoin()
+           local character = player.Character or player.CharacterAdded:Wait()
+           local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+           local running = true  
 
-       local function getClosestCoin()
-           local closestCoin = nil
-           local minDistance = math.huge
-           for _, obj in pairs(workspace:GetDescendants()) do
-               if obj:IsA("BasePart") and obj.Name == "Coin_Server" then
-                   local distance = (humanoidRootPart.Position - obj.Position).Magnitude
-                   if distance < minDistance then
-                       minDistance = distance
-                       closestCoin = obj
+           local function getClosestCoin()
+               local closestCoin = nil
+               local minDistance = math.huge
+               for _, obj in pairs(workspace:GetDescendants()) do
+                   if obj:IsA("BasePart") and obj.Name == "Coin_Server" then
+                       local distance = (humanoidRootPart.Position - obj.Position).Magnitude
+                       if distance < minDistance then
+                           minDistance = distance
+                           closestCoin = obj
+                       end
                    end
                end
+               return closestCoin
            end
-           return closestCoin
-       end
 
-       local function teleportToCoin(target)
-           if not target or not target.Parent then return end
-           humanoidRootPart.CFrame = target.CFrame + Vector3.new(0, 2, 0)
-           task.wait(math.random(0.25, 0.5))  
-       end
+           local function teleportToCoin(target)
+               if not target or not target.Parent then return end
+               humanoidRootPart.CFrame = target.CFrame + Vector3.new(0, 2, 0)
+               task.wait(math.random(0.25, 0.5))  
+           end
 
-       task.spawn(function()
-           while Value do 
-               if not running then return end
+           task.spawn(function()
+               while Value do 
+                   if not running then return end
 
-               local closestCoin = getClosestCoin()
-               if closestCoin then
-                   teleportToCoin(closestCoin)
+                   local closestCoin = getClosestCoin()
+                   if closestCoin then
+                       teleportToCoin(closestCoin)
+                   end
+                   task.wait(math.random(0.25, 0.5)) 
                end
-               task.wait(math.random(0.25, 0.5)) 
-           end
-       end)
+           end)
 
-       if not Value then
-           running = false
-       end
-   end
-})
+           if not Value then
+               running = false
+           end
+       
 
 
 
