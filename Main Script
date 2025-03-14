@@ -55,5 +55,12 @@ local button = SettingTab:CreateButton({
     end
 })
 
-local TestFeatureTab = Window:createtab("Test Features")
-local TestSection = TestFeatureTab:CreateSection("Test Features")
+local TesFeaTab = Window:CreateTab("Test Features")
+local TestSection = TesFeaTab:CreateSection("Test Features")
+
+local button = TesFeaTab:CreateButton({
+    Name = "Test Button",
+    Callback = function()
+        print("TAB WORKS SIGMA")
+    end
+})
