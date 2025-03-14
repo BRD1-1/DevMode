@@ -78,32 +78,21 @@ local Toggle = MainTab:CreateToggle({
            return coins
        end
 
-       local function moveToCoin(target)
-           if not target or not target.Parent then return end 
-
-           local tweenService = game:GetService("TweenService")
-           local distance = (humanoidRootPart.Position - target.Position).Magnitude
-           local tweenInfo = TweenInfo.new(distance / 100, Enum.EasingStyle.Linear) 
-           local goal = {Position = target.Position} 
-           local tween = tweenService:Create(humanoidRootPart, tweenInfo, goal)
-
-           tween:Play()
-           tween.Completed:Wait()
-
-           if running then
-               task.wait(0.2)
-           end
+       local function teleportToCoin(target)
+           if not target or not target.Parent then return end
+           humanoidRootPart.CFrame = target.CFrame + Vector3.new(0, 2, 0)
+           task.wait(0.1)
        end
 
        task.spawn(function()
            while Value do 
-               if not running then return end 
+               if not running then return end
 
                local coins = getCoins()
                for _, coin in pairs(coins) do
-                   if not running then return end 
+                   if not running then return end
                    if coin and coin.Parent then
-                       moveToCoin(coin)
+                       teleportToCoin(coin)
                    end
                    task.wait(0.2)
                end
