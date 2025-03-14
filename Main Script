@@ -34,7 +34,7 @@ KeySettings = {
  }
 })
 
-local SettingTab = Window:CreateTab ("Dev Stuff")
+local SettingTab = Window:CreateTab("Dev Stuff")
 
 local DevSection =  SettingTab:CreateSection("Destroy Interface")
 
