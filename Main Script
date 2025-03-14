@@ -55,6 +55,14 @@ local button = SettingTab:CreateButton({
     end
 })
 
+local section = SettingTab:CreateSection("Reload Interface")
+local Button = SettingTab:CreateButton({
+   Name = "Reload Interface",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/BRD1-1/DevMode/refs/heads/main/Main%20Script", true))()
+   end
+})
+
 local TesFeaTab = Window:CreateTab("Test Features")
 local TestSection = TesFeaTab:CreateSection("Test Features")
 
