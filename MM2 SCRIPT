@@ -12,7 +12,7 @@ local Window = Rayfield:CreateWindow({
    DisableBuildWarnings = false,
 
    ConfigurationSaving = {
-      Enabled = true,
+      Enabled = false,
       FolderName = "BirdHub",
       FileName = "Bird Hub"
    },
