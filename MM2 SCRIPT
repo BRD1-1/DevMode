@@ -56,8 +56,8 @@ local Toggle = MainTab:CreateToggle({
    Flag = "AutoCoin1",
    Callback = function(Value)
         Rayfield:Notify({
-         Title = "Auto Coin Enabled",
-         Content = "If you are afking with this we reccomend you use white screen to reduce lag of the script.",
+         Title = "Auto Coin " .. (Value and "Enabled" or "Disabled"),
+         Content = Value and "If you are afking with this we recommend using white screen to reduce lag." or "Auto Coin has been disabled.",
          Duration = 6.5,
          Image = "coins",
          })
@@ -65,6 +65,8 @@ local Toggle = MainTab:CreateToggle({
        local player = game.Players.LocalPlayer
        local character = player.Character or player.CharacterAdded:Wait()
        local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+       local running = true  -- Variable to track running state
 
        local function getCoins()
            local coins = {}
@@ -77,12 +79,18 @@ local Toggle = MainTab:CreateToggle({
        end
 
        local function flyTo(target)
+           if not target or not target.Parent then return end -- Ensure target still exists
+           
            local tweenService = game:GetService("TweenService")
-           local tweenInfo = TweenInfo.new((humanoidRootPart.Position - target.Position).Magnitude / 75, Enum.EasingStyle.Linear)
+           local distance = (humanoidRootPart.Position - target.Position).Magnitude
+           local tweenInfo = TweenInfo.new(distance / 75, Enum.EasingStyle.Linear)
            local goal = {Position = target.Position + Vector3.new(0, 2, 0)}
            local tween = tweenService:Create(humanoidRootPart, tweenInfo, goal)
+
            tween:Play()
            tween.Completed:Wait()
+
+           if not running then return end -- Check again before final move
 
            local finalMove = TweenInfo.new(0.5, Enum.EasingStyle.Linear)
            local finalGoal = {Position = target.Position}
@@ -93,15 +101,23 @@ local Toggle = MainTab:CreateToggle({
 
        task.spawn(function()
            while Value do 
+               if not running then return end -- Exit loop if disabled
+               
                local coins = getCoins()
                for _, coin in pairs(coins) do
-                   if not Value then return end
-                   flyTo(coin)
+                   if not running then return end -- Exit mid-loop if disabled
+                   if coin and coin.Parent then
+                       flyTo(coin)
+                   end
                    task.wait(0.5)
                end
                task.wait(1)
            end
        end)
+
+       if not Value then
+           running = false -- Stop the loop
+       end
    end
 })
 
