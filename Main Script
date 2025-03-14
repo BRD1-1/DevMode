@@ -63,6 +63,13 @@ local Button = SettingTab:CreateButton({
    end
 })
 
+local Button = SettingTab:CreateButton({
+   Name = "Load Main Script",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/BRD1-1/DevMode/refs/heads/main/MM2%20SCRIPT", true))()
+   end
+})
+
 local TesFeaTab = Window:CreateTab("Test Features")
 local TestSection = TesFeaTab:CreateSection("Test Features")
 
