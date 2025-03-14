@@ -45,7 +45,7 @@ Rayfield:Notify({
 
  -- Home Tab & Section
 
-local MainTab = Window:CreateTab("Home", house)
+local MainTab = Window:CreateTab("Home")
 local AutoSection = MainTab:CreateSection("Auto Farm")
 
 -- Creates Coin Autfarm
@@ -126,7 +126,7 @@ local button = MainTab:CreateButton({
     end
 })
 
-local DetTab = Window:CreateTab("Detection & Callout", "shield-alert")
+local DetTab = Window:CreateTab("Detection & Callout")
 
 local DetSection = DetTab:CreateSection("Detection")
 
