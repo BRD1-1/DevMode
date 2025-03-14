@@ -84,25 +84,25 @@ local button = TesFeaTab:CreateButton({
     end
 })
 
-local button = TesFeaTab:CreateButton({
-    Name = "Call out Murderer",
+local Button = TesFeaTab:CreateButton({
+    Name = "Detect Murderer",
     Callback = function()
         task.spawn(function()
             for _, player in pairs(game.Players:GetPlayers()) do
                 if player.Character then
                     local backpack = player:FindFirstChild("Backpack")
-
+                    
                     for _, tool in pairs(player.Character:GetChildren()) do
                         if tool:IsA("Tool") and tool.Name:lower() == "knife" then
-                            game:GetService("TextChatService").TextChannels.RBXGeneral:SendMessageAsync(player.Name .. " is the murderer")
+                            game:GetService("TextChatService").TextChannels:WaitForChild("RBXGeneral"):SendAsync(player.Name .. " is the murderer!")
                             return
                         end
                     end
-
+ 
                     if backpack then
                         for _, tool in pairs(backpack:GetChildren()) do
                             if tool:IsA("Tool") and tool.Name:lower() == "knife" then
-                                game:GetService("TextChatService").TextChannels.RBXGeneral:SendMessageAsync(player.Name .. " is the murderer")
+                                game:GetService("TextChatService").TextChannels:WaitForChild("RBXGeneral"):SendAsync(player.Name .. " is the murderer!")
                                 return
                             end
                         end
@@ -112,9 +112,9 @@ local button = TesFeaTab:CreateButton({
             Rayfield:Notify({
                 Title = "No Murderer Found",
                 Content = "No player with a knife was detected.",
-                Duration = 5,
-                Image = "Slice"
+                Duration = 6.5,
+                Image = "Slice",
             })
         end)
-    end
-})
+    end,
+ })
