@@ -336,18 +336,20 @@ local button = SettingTab:CreateButton({
 local button = SettingTab:CreateButton({
     Name = "White Screen",
     Callback = function()
-      local player = game.Players.LocalPlayer
-      local playerGui = player:FindFirstChildOfClass("PlayerGui")
+    while true do
+        local player = game.Players.LocalPlayer
+        local playerGui = player:FindFirstChildOfClass("PlayerGui")
       
-      local screenGui = Instance.new("ScreenGui")
-      screenGui.Parent = playerGui
+        local screenGui = Instance.new("ScreenGui")
+        screenGui.Parent = playerGui
       
-      local whiteFrame = Instance.new("Frame")
-      whiteFrame.Size = UDim2.new(2, 0, 2, 0)
-      whiteFrame.Position = UDim2.new(-0.5, 0, -0.5, 0)
-      whiteFrame.BackgroundColor3 = Color3.new(1, 1, 1)
-      whiteFrame.BorderSizePixel = 0
-      whiteFrame.Parent = screenGui
+        local whiteFrame = Instance.new("Frame")
+        whiteFrame.Size = UDim2.new(2, 0, 2, 0)
+        whiteFrame.Position = UDim2.new(-0.5, 0, -0.5, 0)
+        whiteFrame.BackgroundColor3 = Color3.new(1, 1, 1)
+        whiteFrame.BorderSizePixel = 0
+        whiteFrame.Parent = screenGui
+        end
     end
 })
 
