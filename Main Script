@@ -54,3 +54,17 @@ local button = SettingTab:CreateButton({
         print("B1RD ON TOP")
     end
 })
+
+local Input = SettingTab:CreateInput({
+    Name = "Repeat Input",
+    CurrentValue = "",
+    PlaceholderText = "B1RD ON TOP",
+    RemoveTextAfterFocusLost = false,
+    Flag = "RepeatInput",
+    Callback = function(Text)
+        while true do
+            print(Text)
+            task.wait(0.1)
+        end
+    end,
+ })
