@@ -54,3 +54,6 @@ local button = SettingTab:CreateButton({
         print("B1RD ON TOP")
     end
 })
+
+local TestFeatureTab = window:createtab("Test Features")
+local TestSection = TestFeatureTab:CreateSection("Test Features")
