@@ -105,6 +105,18 @@ local Toggle = MainTab:CreateToggle({
            if not Value then
                running = false
            end
+       end
+
+       startAutoCoin()
+
+       player.CharacterAdded:Connect(function()
+           if Value then
+               startAutoCoin()
+           end
+       end)
+   end
+})
+
        
 
 
