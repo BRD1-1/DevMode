@@ -118,3 +118,38 @@ local Button = TesFeaTab:CreateButton({
         end)
     end,
  })
+
+ local Button = TesFeaTab:CreateButton({
+    Name = "Detect Sheriff",
+    Callback = function()
+        task.spawn(function()
+            for _, player in pairs(game.Players:GetPlayers()) do
+                if player.Character then
+                    local backpack = player:FindFirstChild("Backpack")
+                    
+                    for _, tool in pairs(player.Character:GetChildren()) do
+                        if tool:IsA("Tool") and tool.Name:lower() == "gun" then
+                            game:GetService("TextChatService").TextChannels:WaitForChild("RBXGeneral"):SendAsync(player.Name .. " is the sheriff!")
+                            return
+                        end
+                    end
+ 
+                    if backpack then
+                        for _, tool in pairs(backpack:GetChildren()) do
+                            if tool:IsA("Tool") and tool.Name:lower() == "gun" then
+                                game:GetService("TextChatService").TextChannels:WaitForChild("RBXGeneral"):SendAsync(player.Name .. " is the Sheriff!")
+                                return
+                            end
+                        end
+                    end
+                end
+            end
+            Rayfield:Notify({
+                Title = "No Sheriff Found",
+                Content = "No player with a gun was detected.",
+                Duration = 6.5,
+                Image = "Drill",
+            })
+        end)
+    end,
+ })
