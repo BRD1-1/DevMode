@@ -45,7 +45,7 @@ Rayfield:Notify({
 
  -- Home Tab & Section
 
-local MainTab = Window:CreateTab("Home", "house")
+local MainTab = Window:CreateTab("Home", house)
 local AutoSection = MainTab:CreateSection("Auto Farm")
 
 -- Creates Coin Autfarm
