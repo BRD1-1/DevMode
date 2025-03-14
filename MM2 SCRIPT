@@ -1,1 +1,246 @@
+-- Loads Rayfield And Creates Window
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
+local Window = Rayfield:CreateWindow({
+   Name = "Bird Hub",
+   Icon = "bird", 
+   LoaingTitle = "Bird Hub",
+   LoadingSubtitle = "by B1RD",
+   Theme = "Default",
+
+   DisableRayfieldPrompts = false,
+   DisableBuildWarnings = false,
+
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = "BirdHub",
+      FileName = "Bird Hub"
+   },
+
+   Discord = {
+      Enabled = false,
+      Invite = "noinvitelink", 
+      RememberJoins = true
+   },
+
+   KeySystem = true, 
+   KeySettings = {
+      Title = "BirdHub KeySystem",
+      Subtitle = "",
+      Note = "", 
+      FileName = "B1RDKEY", 
+      SaveKey = true, 
+      GrabKeyFromSite = false, 
+      Key = {"B1KEY", "B2KEY"} 
+   }
+})
+
+-- Notifys user that it has been executed
+Rayfield:Notify({
+    Title = "Welcome",
+    Content = "B1RD Hub has succesfully been executed. Enjoy!",
+    Duration = 3,
+    Image = "bird",
+ })
+
+ -- Home Tab & Section
+
+local MainTab = Window:CreateTab("Home")
+local AutoSection = MainTab:CreateSection("Auto Farm")
+
+-- Creates Coin Autfarm
+
+local Toggle = MainTab:CreateToggle({
+   Name = "AutoCoin",
+   CurrentValue = false,
+   Flag = "AutoCoin1",
+   Callback = function(Value)
+        Rayfield:Notify({
+         Title = "Auto Coin Enabled",
+         Content = "If you are afking with this we reccomend you use white screen to reduce lag of the script.",
+         Duration = 6.5,
+         Image = "coins",
+         })
+
+       local player = game.Players.LocalPlayer
+       local character = player.Character or player.CharacterAdded:Wait()
+       local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+       local function getCoins()
+           local coins = {}
+           for _, obj in pairs(workspace:GetDescendants()) do
+               if obj:IsA("BasePart") and obj.Name == "Coin_Server" then
+                   table.insert(coins, obj)
+               end
+           end
+           return coins
+       end
+
+       local function flyTo(target)
+           local tweenService = game:GetService("TweenService")
+           local tweenInfo = TweenInfo.new((humanoidRootPart.Position - target.Position).Magnitude / 75, Enum.EasingStyle.Linear)
+           local goal = {Position = target.Position + Vector3.new(0, 2, 0)}
+           local tween = tweenService:Create(humanoidRootPart, tweenInfo, goal)
+           tween:Play()
+           tween.Completed:Wait()
+
+           local finalMove = TweenInfo.new(0.5, Enum.EasingStyle.Linear)
+           local finalGoal = {Position = target.Position}
+           local finalTween = tweenService:Create(humanoidRootPart, finalMove, finalGoal)
+           finalTween:Play()
+           finalTween.Completed:Wait()
+       end
+
+       task.spawn(function()
+           while Value do 
+               local coins = getCoins()
+               for _, coin in pairs(coins) do
+                   if not Value then return end
+                   flyTo(coin)
+                   task.wait(0.5)
+               end
+               task.wait(1)
+           end
+       end)
+   end
+})
+
+local DetSection = MainTab:CreateSection("Detection")
+
+-- Creates Detect Murderer
+
+local Button = MainTab:CreateButton({
+   Name = "Detect Murderer",
+   Callback = function()
+       task.spawn(function()
+           for _, player in pairs(game.Players:GetPlayers()) do
+               if player.Character then
+                   local backpack = player:FindFirstChild("Backpack")
+                   
+                   for _, tool in pairs(player.Character:GetChildren()) do
+                       if tool:IsA("Tool") and tool.Name:lower() == "knife" then
+                           Rayfield:Notify({
+                               Title = player.Name,
+                               Content = player.Name .. " is the murderer!",
+                               Duration = 6.5,
+                               Image = "Slice",
+                           })
+                           return
+                       end
+                   end
+
+                   if backpack then
+                       for _, tool in pairs(backpack:GetChildren()) do
+                           if tool:IsA("Tool") and tool.Name:lower() == "knife" then
+                               Rayfield:Notify({
+                                   Title = player.Name,
+                                   Content = player.Name .. " is the murderer!",
+                                   Duration = 6.5,
+                                   Image = "Slice",
+                               })
+                               return
+                           end
+                       end
+                   end
+               end
+           end
+           Rayfield:Notify({
+               Title = "No Murderer Found",
+               Content = "No player with a knife was detected.",
+               Duration = 5,
+               Image = "Slice",
+           })
+       end)
+   end,
+})
+
+
+-- Creates Detect Sheriff
+
+local Button = MainTab:CreateButton({
+   Name = "Detect Sheriff",
+   Callback = function()
+       task.spawn(function()
+           for _, player in pairs(game.Players:GetPlayers()) do
+               if player.Character then
+                   local backpack = player:FindFirstChild("Backpack")
+                   
+                   for _, tool in pairs(player.Character:GetChildren()) do
+                       if tool:IsA("Tool") and tool.Name:lower() == "gun" then
+                           Rayfield:Notify({
+                               Title = player.Name,
+                               Content = player.Name .. " is the sheriff!",
+                               Duration = 6.5,
+                               Image = "Drill",
+                           })
+                           return
+                       end
+                   end
+
+                   if backpack then
+                       for _, tool in pairs(backpack:GetChildren()) do
+                           if tool:IsA("Tool") and tool.Name:lower() == "gun" then
+                               Rayfield:Notify({
+                                   Title = player.Name,
+                                   Content = player.Name .. " is the sheriff!",
+                                   Duration = 6.5,
+                                   Image = "Drill",
+                               })
+                               return
+                           end
+                       end
+                   end
+               end
+           end
+           Rayfield:Notify({
+               Title = "No Sheriff Found",
+               Content = "No player with a gun was detected.",
+               Duration = 5,
+               Image = "Drill",
+           })
+       end)
+   end,
+})
+-- Creates Settings Tab
+
+local SettingTab = Window:CreateTab("Settings")
+
+-- Creates destroy interface button
+
+local DeSection =  SettingTab:CreateSection("Destroy Interface")
+
+local button = SettingTab:CreateButton({
+    Name = "Destroy Interface",
+    Callback = function()
+        Rayfield:Destroy()
+    end
+})
+
+-- Creates White Screen Button
+
+local button = SettingTab:CreateButton({
+    Name = "White Screen",
+    Callback = function()
+      local player = game.Players.LocalPlayer
+      local playerGui = player:FindFirstChildOfClass("PlayerGui")
+      
+      local screenGui = Instance.new("ScreenGui")
+      screenGui.Parent = playerGui
+      
+      local whiteFrame = Instance.new("Frame")
+      whiteFrame.Size = UDim2.new(2, 0, 2, 0)
+      whiteFrame.Position = UDim2.new(-0.5, 0, -0.5, 0)
+      whiteFrame.BackgroundColor3 = Color3.new(1, 1, 1)
+      whiteFrame.BorderSizePixel = 0
+      whiteFrame.Parent = screenGui
+    end
+})
+
+
+local section = SettingTab:CreateSection("Dev Mode")
+local Button = SettingTab:CreateButton({
+   Name = "Dev Mode",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/BRD1-1/DevMode/refs/heads/main/Main%20Script", true))()
+   end
+})
