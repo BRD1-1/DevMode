@@ -39,7 +39,7 @@ local Window = Rayfield:CreateWindow({
 Rayfield:Notify({
     Title = "Welcome",
     Content = "B1RD Hub has succesfully been executed. Enjoy!",
-    Duration = 6.5,
+    Duration = 3,
     Image = "bird",
  })
 
@@ -51,128 +51,84 @@ local AutoSection = MainTab:CreateSection("Auto Farm")
 -- Creates Coin Autfarm
 
 local Toggle = MainTab:CreateToggle({
-   Name = "AutoCoin",
-   CurrentValue = false,
-   Flag = "AutoCoin1",
-   Callback = function(Value)
-        Rayfield:Notify({
-         Title = "Auto Coin " .. (Value and "Enabled" or "Disabled"),
-         Content = Value and "If you are AFKing, we recommend using a white screen to reduce lag." or "Auto Coin has been disabled.",
-         Duration = 6.5,
-         Image = "coins",
-         })
+    Name = "AutoCoin",
+    CurrentValue = false,
+    Flag = "AutoCoin1",
+    Callback = function(Value)
+         Rayfield:Notify({
+          Title = "Auto Coin " .. (Value and "Enabled" or "Disabled"),
+          Content = Value and "If you are AFKing, we recommend using a white screen to reduce lag." or "Auto Coin has been disabled.",
+          Duration = 6.5,
+          Image = "coins",
+          })
+ 
+        local player = game.Players.LocalPlayer
+ 
+        local function startAutoCoin()
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+            local running = true  
+ 
+            local function getClosestCoin()
+                local closestCoin = nil
+                local minDistance = math.huge
+                for _, obj in pairs(workspace:GetDescendants()) do
+                    if obj:IsA("BasePart") and obj.Name == "Coin_Server" then
+                        local distance = (humanoidRootPart.Position - obj.Position).Magnitude
+                        if distance < minDistance then
+                            minDistance = distance
+                            closestCoin = obj
+                        end
+                    end
+                end
+                return closestCoin
+            end
+ 
+            local function teleportToCoin(target)
+                if not target or not target.Parent then return end
+                humanoidRootPart.CFrame = target.CFrame + Vector3.new(0, 2, 0)
+                task.wait(math.random(0.25, 0.5))  
+            end
+ 
+            task.spawn(function()
+                while Value do 
+                    if not running then return end
+ 
+                    local closestCoin = getClosestCoin()
+                    if closestCoin then
+                        teleportToCoin(closestCoin)
+                    end
+                    task.wait(math.random(0.25, 0.5)) 
+                end
+            end)
+ 
+            if not Value then
+                running = false
+            end
+        end
+ 
+        startAutoCoin()
+ 
+        player.CharacterAdded:Connect(function()
+            if Value then
+                startAutoCoin()
+            end
+        end)
+    end
+ }) 
 
-       local player = game.Players.LocalPlayer
+local TpSection = MainTab:CreateSection("Misc")
 
-       local function startAutoCoin()
-           local character = player.Character or player.CharacterAdded:Wait()
-           local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-           local running = true  
-
-           local function getClosestCoin()
-               local closestCoin = nil
-               local minDistance = math.huge
-               for _, obj in pairs(workspace:GetDescendants()) do
-                   if obj:IsA("BasePart") and obj.Name == "Coin_Server" then
-                       local distance = (humanoidRootPart.Position - obj.Position).Magnitude
-                       if distance < minDistance then
-                           minDistance = distance
-                           closestCoin = obj
-                       end
-                   end
-               end
-               return closestCoin
-           end
-
-           local function teleportToCoin(target)
-               if not target or not target.Parent then return end
-               humanoidRootPart.CFrame = target.CFrame + Vector3.new(0, 2, 0)
-               task.wait(math.random(0.25, 0.5))  
-           end
-
-           task.spawn(function()
-               while Value do 
-                   if not running then return end
-
-                   local closestCoin = getClosestCoin()
-                   if closestCoin then
-                       teleportToCoin(closestCoin)
-                   end
-                   task.wait(math.random(0.25, 0.5)) 
-               end
-           end)
-
-           if not Value then
-               running = false
-           end
-       end
-
-       startAutoCoin()
-
-       player.CharacterAdded:Connect(function()
-           if Value then
-               startAutoCoin()
-           end
-       end)
-   end
+local button = MainTab:CreateButton({
+    Name = "teleport up 100 studs",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local character = player.Character
+        if character and character:FindFirstChild("HumanoidRootPart") then
+            character.HumanoidRootPart.CFrame = character.HumanoidRootPart.CFrame + Vector3.new(0, 100, 0)
+        end
+    end
 })
-
-local AvoSection = MaintTab:CreateSection("Auto Avoid")
-
-local Toggle = MainTab:CreateToggle({ 
-   Name = "Auto Avoid", 
-   CurrentValue = false,
-   Flag = "AvMurd1", 
-   Callback = function(Value)
-       if Value then
-           local connection
-           connection = game:GetService("RunService").Heartbeat:Connect(function()
-               for _, player in pairs(game.Players:GetPlayers()) do
-                   if player.Character then
-                       local backpack = player:FindFirstChild("Backpack")
-                       
-                       for _, tool in pairs(player.Character:GetChildren()) do
-                           if tool:IsA("Tool") and tool.Name:lower() == "knife" then
-                               local murderer = player.Character:FindFirstChild("HumanoidRootPart")
-                               if murderer and game.Players.LocalPlayer.Character then
-                                   local localRoot = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                                   if localRoot then
-                                       if (localRoot.Position - murderer.Position).magnitude <= 10 then
-                                           localRoot.CFrame = localRoot.CFrame + Vector3.new(0, 100, 0)
-                                       end
-                                   end
-                               end
-                           end
-                       end
-                       
-                       if backpack then
-                           for _, tool in pairs(backpack:GetChildren()) do
-                               if tool:IsA("Tool") and tool.Name:lower() == "knife" then
-                                   local murderer = player.Character:FindFirstChild("HumanoidRootPart")
-                                   if murderer and game.Players.LocalPlayer.Character then
-                                       local localRoot = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                                       if localRoot then
-                                           if (localRoot.Position - murderer.Position).magnitude <= 10 then
-                                               localRoot.CFrame = localRoot.CFrame + Vector3.new(0, 100, 0)
-                                           end
-                                       end
-                                   end
-                               end
-                           end
-                       end
-                   end
-               end
-           end)
-           
-           Toggle.Callback = function(Value)
-               if not Value and connection then
-                   connection:Disconnect()
-               end
-           end
-       end
-   end,
-})
-
 
 local button = MainTab:CreateButton({
     Name = "Unban VC",
