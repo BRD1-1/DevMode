@@ -119,7 +119,7 @@ local button = MainTab:CreateButton({
 })
 
 local button = MainTab:CreateButton({
-    Name = "Unban VC"
+    Name = "Unban VC",
     Callback = function()
         local voiceChatService = game:GetService("VoiceChatService")
         voiceChatService:joinVoice()
