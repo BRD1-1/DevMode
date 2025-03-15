@@ -98,7 +98,6 @@ local Toggle = MainTab:CreateToggle({
                     if closestCoin then
                         teleportToCoin(closestCoin)
                     end
-                    task.wait(0.1)
                 end
             end)
  
