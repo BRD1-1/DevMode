@@ -357,68 +357,76 @@ local button = SettingTab:CreateButton({
 local button = SettingTab:CreateButton({
     Name = "Anti AFK",
     Callback = function()
-        local ScreenGui = Instance.new("ScreenGui")
-        local MainFrame = Instance.new("Frame")
-        local UICornerMain = Instance.new("UICorner")
-        local Title = Instance.new("TextLabel")
-        local StatusLabel = Instance.new("TextLabel")
-        local TimerLabel = Instance.new("TextLabel")
-        local UICornerTimer = Instance.new("UICorner")
+        local function createAntiAFKGUI()
+            wait(0.1) -- Delays GUI creation to ensure it appears on top
 
-        ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-        ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+            local ScreenGui = Instance.new("ScreenGui")
+            local MainFrame = Instance.new("Frame")
+            local UICornerMain = Instance.new("UICorner")
+            local Title = Instance.new("TextLabel")
+            local StatusLabel = Instance.new("TextLabel")
+            local TimerLabel = Instance.new("TextLabel")
+            local UICornerTimer = Instance.new("UICorner")
 
-        MainFrame.Parent = ScreenGui
-        MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-        MainFrame.Size = UDim2.new(0, 200, 0, 120)
-        MainFrame.Position = UDim2.new(0.5, -100, 0, 50) -- Moved down slightly
-        MainFrame.BorderSizePixel = 0
+            ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+            ScreenGui.ResetOnSpawn = false
+            ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
-        UICornerMain.Parent = MainFrame
-        UICornerMain.CornerRadius = UDim.new(0, 10)
+            MainFrame.Parent = ScreenGui
+            MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+            MainFrame.Size = UDim2.new(0, 200, 0, 120)
+            MainFrame.Position = UDim2.new(0.5, -100, 0, 50)
+            MainFrame.BorderSizePixel = 0
 
-        Title.Parent = MainFrame
-        Title.Text = "Bird Hub"
-        Title.Font = Enum.Font.SourceSansBold
-        Title.TextSize = 18
-        Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-        Title.Size = UDim2.new(1, 0, 0, 25)
-        Title.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+            UICornerMain.Parent = MainFrame
+            UICornerMain.CornerRadius = UDim.new(0, 10)
 
-        StatusLabel.Parent = MainFrame
-        StatusLabel.Text = "Anti AFK Enabled"
-        StatusLabel.Font = Enum.Font.SourceSansBold
-        StatusLabel.TextSize = 16
-        StatusLabel.Size = UDim2.new(1, -20, 0, 35)
-        StatusLabel.Position = UDim2.new(0, 10, 0, 35)
-        StatusLabel.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-        StatusLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+            Title.Parent = MainFrame
+            Title.Text = "Bird Hub"
+            Title.Font = Enum.Font.SourceSansBold
+            Title.TextSize = 18
+            Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+            Title.Size = UDim2.new(1, 0, 0, 25)
+            Title.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 
-        TimerLabel.Parent = MainFrame
-        TimerLabel.Text = "Time Active: 0s"
-        TimerLabel.Font = Enum.Font.SourceSansBold
-        TimerLabel.TextSize = 16
-        TimerLabel.Size = UDim2.new(1, -20, 0, 30)
-        TimerLabel.Position = UDim2.new(0, 10, 0, 75)
-        TimerLabel.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-        TimerLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+            StatusLabel.Parent = MainFrame
+            StatusLabel.Text = "Anti AFK Enabled"
+            StatusLabel.Font = Enum.Font.SourceSansBold
+            StatusLabel.TextSize = 16
+            StatusLabel.Size = UDim2.new(1, -20, 0, 35)
+            StatusLabel.Position = UDim2.new(0, 10, 0, 35)
+            StatusLabel.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+            StatusLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 
-        UICornerTimer.Parent = TimerLabel
-        UICornerTimer.CornerRadius = UDim.new(0, 8)
+            TimerLabel.Parent = MainFrame
+            TimerLabel.Text = "Time Active: 0s"
+            TimerLabel.Font = Enum.Font.SourceSansBold
+            TimerLabel.TextSize = 16
+            TimerLabel.Size = UDim2.new(1, -20, 0, 30)
+            TimerLabel.Position = UDim2.new(0, 10, 0, 75)
+            TimerLabel.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+            TimerLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 
-        local startTime = tick()
-        local vu = game:GetService("VirtualUser")
-        game:GetService("Players").LocalPlayer.Idled:Connect(function()
-            vu:CaptureController()
-            vu:ClickButton2(Vector2.new())
-        end)
+            UICornerTimer.Parent = TimerLabel
+            UICornerTimer.CornerRadius = UDim.new(0, 8)
 
-        spawn(function()
-            while true do
-                TimerLabel.Text = "Time Active: " .. math.floor(tick() - startTime) .. "s"
-                wait(1)
-            end
-        end)
+            local startTime = tick()
+            local vu = game:GetService("VirtualUser")
+            game:GetService("Players").LocalPlayer.Idled:Connect(function()
+                vu:CaptureController()
+                vu:ClickButton2(Vector2.new())
+            end)
+
+            spawn(function()
+                while true do
+                    TimerLabel.Text = "Time Active: " .. math.floor(tick() - startTime) .. "s"
+                    wait(1)
+                end
+            end)
+        end
+
+        game.Players.LocalPlayer.CharacterAdded:Connect(createAntiAFKGUI)
+        createAntiAFKGUI()
     end
 })
 
