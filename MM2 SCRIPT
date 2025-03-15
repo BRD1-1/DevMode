@@ -111,6 +111,7 @@ local Toggle = MainTab:CreateToggle({
                 humanoidRootPart.CFrame = humanoidRootPart.CFrame:Lerp(CFrame.new(target.Position + Vector3.new(0, 3, 0)), speed)
                 timeout = timeout + 1
                 if timeout > 50 then break end
+                task.wait() -- Prevents instant infinite loop crash
             end
         end
 
@@ -120,6 +121,7 @@ local Toggle = MainTab:CreateToggle({
                 if closestCoin then
                     moveToCoin(closestCoin, distance)
                 end
+                task.wait() -- Prevents game freeze/crash
             end
         end)
 
