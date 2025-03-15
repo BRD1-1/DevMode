@@ -160,8 +160,8 @@ local button = MainTab:CreateButton({
     end
 })
 
-local MovTab = window:createtab("Movement")
-local section = MoveTab:CreateSection("Walkspeed")
+local MovTab = Window:CreateTab("Movement")
+local AutoSection = MovTab:CreateSection("Walkspeed")
 
 local Slider = MovTab:CreateSlider({
     Name = "WalkSpeed Changer",
@@ -178,6 +178,7 @@ local Slider = MovTab:CreateSlider({
        end
     end,
  })
+ 
 
 local DetTab = Window:CreateTab("Detection & Callout")
 
