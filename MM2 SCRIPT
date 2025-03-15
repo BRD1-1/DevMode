@@ -75,10 +75,10 @@ local Toggle = MainTab:CreateToggle({
 
         local function getClosestCoin()
             local character = player.Character
-            if not character then return nil end
+            if not character then return nil, nil end
 
             local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
-            if not humanoidRootPart then return nil end
+            if not humanoidRootPart then return nil, nil end
 
             local closestCoin = nil
             local minDistance = math.huge
@@ -92,36 +92,37 @@ local Toggle = MainTab:CreateToggle({
                     end
                 end
             end
+
             return closestCoin, minDistance
         end
 
         local function moveToCoin(target, distance)
             local character = player.Character
-            if not character then return end
+            if not character or not target then return end
 
             local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
-            if not humanoidRootPart or not target then return end
+            if not humanoidRootPart then return end
 
             local speed = distance > 100 and 0.05 or (distance > 50 and 0.1 or 0.2)
 
             local timeout = 0
-            while (humanoidRootPart.Position - target.Position).Magnitude > 2 do
-                if not running then return end
+            while running and (humanoidRootPart.Position - target.Position).Magnitude > 2 do
                 noclip()
                 humanoidRootPart.CFrame = humanoidRootPart.CFrame:Lerp(CFrame.new(target.Position + Vector3.new(0, 3, 0)), speed)
                 timeout = timeout + 1
                 if timeout > 50 then break end
-                task.wait() -- Prevents instant infinite loop crash
+                task.wait() -- Prevents overload while keeping instant movement
             end
         end
 
-        task.spawn(function()
+        task.defer(function()
             while running do
                 local closestCoin, distance = getClosestCoin()
                 if closestCoin then
                     moveToCoin(closestCoin, distance)
+                else
+                    task.wait(0.1) -- Prevents useless processing if no coins exist
                 end
-                task.wait() -- Prevents game freeze/crash
             end
         end)
 
