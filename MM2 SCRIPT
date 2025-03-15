@@ -65,45 +65,43 @@ local Toggle = MainTab:CreateToggle({
         local player = game.Players.LocalPlayer
         local running = Value
 
-        local function getClosestCoin()
+        local function getAllCoins()
             local character = player.Character
-            if not character then return nil end
+            if not character then return {} end
 
             local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
-            if not humanoidRootPart then return nil end
+            if not humanoidRootPart then return {} end
 
-            local closestCoin
-            local minDistance = math.huge
+            local coins = {}
 
             for _, obj in pairs(workspace:GetDescendants()) do
                 if obj:IsA("BasePart") and obj.Name == "Coin_Server" then
-                    local distance = (humanoidRootPart.Position - obj.Position).Magnitude
-                    if distance < minDistance then
-                        minDistance = distance
-                        closestCoin = obj
-                    end
+                    table.insert(coins, obj)
                 end
             end
-            return closestCoin
+            return coins
         end
 
-        local function moveToCoin(target)
+        local function collectAllCoins()
             local character = player.Character
             if not character then return end
 
             local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
-            if humanoidRootPart and target and target.Parent then
-                humanoidRootPart.Position = target.Position + Vector3.new(0, 2, 0)
+            if not humanoidRootPart then return end
+
+            local coins = getAllCoins()
+            for _, coin in pairs(coins) do
+                if coin and coin.Parent then
+                    humanoidRootPart.Position = coin.Position + Vector3.new(0, 2, 0)
+                    task.wait(0.05)
+                end
             end
         end
 
         task.spawn(function()
             while running do
-                local closestCoin = getClosestCoin()
-                if closestCoin then
-                    moveToCoin(closestCoin)
-                end
-                task.wait(0.01) -- Fast loop execution
+                collectAllCoins()
+                task.wait(0.01)
             end
         end)
 
@@ -114,6 +112,7 @@ local Toggle = MainTab:CreateToggle({
         end)
     end
 })
+
 
 local TpSection = MainTab:CreateSection("Misc")
 
