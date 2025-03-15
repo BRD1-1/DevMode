@@ -104,19 +104,31 @@ local Toggle = MainTab:CreateToggle({
 
             local speed
             if distance > 100 then
-                speed = 0.05 -- Very slow if far away (reduces detection risk)
+                speed = 0.05
             elseif distance > 50 then
-                speed = 0.1 -- Medium speed for medium distances
+                speed = 0.1
             else
-                speed = 0.2 -- Fast when close
+                speed = 0.2
             end
+
+            local initialPosition = humanoidRootPart.Position
+            local timeout = 0
 
             while (humanoidRootPart.Position - target.Position).Magnitude > 2 do
                 if not running then return end
                 noclip()
                 humanoidRootPart.CFrame = humanoidRootPart.CFrame:Lerp(CFrame.new(target.Position + Vector3.new(0, 3, 0)), speed)
                 task.wait()
+
+                timeout = timeout + 1
+                if timeout > 100 then break end
             end
+
+            if (humanoidRootPart.Position - target.Position).Magnitude > 5 then
+                return false
+            end
+
+            return true
         end
 
         local function collectCoins()
@@ -126,8 +138,10 @@ local Toggle = MainTab:CreateToggle({
             while running do
                 local closestCoin, distance = getClosestCoin()
                 if closestCoin then
-                    moveToCoin(closestCoin, distance)
-                    task.wait(0.25)
+                    local success = moveToCoin(closestCoin, distance)
+                    if success then
+                        task.wait(0.25)
+                    end
                 else
                     task.wait(3)
                 end
