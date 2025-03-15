@@ -93,7 +93,7 @@ local Toggle = MainTab:CreateToggle({
 
             for _, coin in pairs(coins) do
                 if coin and coin.Parent then
-                    humanoidRootPart.Position = coin.Position + Vector3.new(0, 2, 0)
+                    humanoidRootPart.CFrame = CFrame.new(coin.Position + Vector3.new(0, 2, 0))
                     task.wait(0.25)
                 end
             end
