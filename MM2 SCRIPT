@@ -50,6 +50,8 @@ local AutoSection = MainTab:CreateSection("Auto Farm")
 
 -- Creates Coin Autofarm
 
+local TpSection = MainTab:CreateSection("Misc")
+
 local Toggle = MainTab:CreateToggle({
     Name = "AutoCoin",
     CurrentValue = false,
@@ -111,24 +113,23 @@ local Toggle = MainTab:CreateToggle({
                 humanoidRootPart.CFrame = humanoidRootPart.CFrame:Lerp(CFrame.new(target.Position + Vector3.new(0, 3, 0)), speed)
                 timeout = timeout + 1
                 if timeout > 50 then break end
+                task.wait() -- Prevents infinite loop crash
             end
         end
 
-        local function collectCoins()
+        task.spawn(function()
             while running do
                 local closestCoin, distance = getClosestCoin()
                 if closestCoin then
                     moveToCoin(closestCoin, distance)
                 end
+                task.wait() -- Prevents infinite execution crash
             end
-        end
-
-        task.spawn(collectCoins)
+        end)
 
         player.CharacterAdded:Connect(function()
             if Value then
                 running = true
-                task.spawn(collectCoins)
             end
         end)
     end
