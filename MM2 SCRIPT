@@ -67,7 +67,7 @@ local Toggle = MainTab:CreateToggle({
 
         local function noclip()
             for _, part in pairs(player.Character:GetDescendants()) do
-                if part:IsA("BasePart") and part.CanCollide then
+                if part:IsA("BasePart") then
                     part.CanCollide = false
                 end
             end
@@ -111,16 +111,16 @@ local Toggle = MainTab:CreateToggle({
             for _, coin in ipairs(coins) do
                 if coin and coin.Parent then
                     local distance = (humanoidRootPart.Position - coin.Position).Magnitude
-                    local speed = distance > 100 and 0.05 or (distance > 50 and 0.1 or 0.2)
+                    local speed = distance > 100 and 0.03 or (distance > 50 and 0.07 or 0.12)
 
                     local timeout = 0
-                    while (humanoidRootPart.Position - coin.Position).Magnitude > 2 do
+                    while (humanoidRootPart.Position - coin.Position).Magnitude > 3 do
                         if not running then return end
                         noclip()
                         humanoidRootPart.CFrame = humanoidRootPart.CFrame:Lerp(CFrame.new(coin.Position + Vector3.new(0, 3, 0)), speed)
 
                         timeout = timeout + 1
-                        if timeout > 100 then break end
+                        if timeout > 50 then break end
                     end
                 end
             end
@@ -132,6 +132,7 @@ local Toggle = MainTab:CreateToggle({
                 if #coins > 0 then
                     moveToCoins(coins)
                 end
+                task.wait(0.05) -- Prevents overloading the game physics
             end
         end)
 
@@ -142,7 +143,6 @@ local Toggle = MainTab:CreateToggle({
         end)
     end
 })
-
 
 local button = MainTab:CreateButton({
     Name = "Unban VC",
