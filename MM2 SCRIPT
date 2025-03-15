@@ -95,7 +95,7 @@ local Toggle = MainTab:CreateToggle({
             for _, coin in pairs(coins) do
                 if coin and coin.Parent then
                     humanoidRootPart.Position = coin.Position + Vector3.new(0, 2, 0)
-                    task.wait(0.05)
+                    task.wait(0.25)
                     count = count + 1
                     if count >= 3 then break end
                 end
@@ -116,8 +116,6 @@ local Toggle = MainTab:CreateToggle({
         end)
     end
 })
-
-
 
 local TpSection = MainTab:CreateSection("Misc")
 
