@@ -103,15 +103,19 @@ local Toggle = MainTab:CreateToggle({
             local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
             if not humanoidRootPart then return end
 
+            noclip()
+
+            local targetPosition = target.Position + Vector3.new(0, 5, 0) -- Always teleport **above** the coin
+
             local speed = distance > 100 and 0.05 or (distance > 50 and 0.1 or 0.2)
 
             local timeout = 0
-            while running and (humanoidRootPart.Position - target.Position).Magnitude > 2 do
+            while running and (humanoidRootPart.Position - targetPosition).Magnitude > 2 do
                 noclip()
-                humanoidRootPart.CFrame = humanoidRootPart.CFrame:Lerp(CFrame.new(target.Position + Vector3.new(0, 3, 0)), speed)
+                humanoidRootPart.CFrame = humanoidRootPart.CFrame:Lerp(CFrame.new(targetPosition), speed)
                 timeout = timeout + 1
                 if timeout > 50 then break end
-                task.wait(0.01) -- Prevents infinite physics overload
+                task.wait(0.01) -- Prevents overloading game physics
             end
         end
 
@@ -121,9 +125,9 @@ local Toggle = MainTab:CreateToggle({
                 if closestCoin then
                     moveToCoin(closestCoin, distance)
                 else
-                    task.wait(0.1) -- Prevents looping without coins
+                    task.wait(0.1) -- Prevents looping when no coins exist
                 end
-                task.wait(0.01) -- Allows stable looping
+                task.wait(0.01) -- Stabilizes script execution
             end
         end)
 
