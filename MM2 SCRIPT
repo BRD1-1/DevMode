@@ -92,17 +92,24 @@ local Toggle = MainTab:CreateToggle({
                     end
                 end
             end
-            return closestCoin
+            return closestCoin, minDistance
         end
 
-        local function moveToCoin(target)
+        local function moveToCoin(target, distance)
             local character = player.Character
             if not character then return end
 
             local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
             if not humanoidRootPart or not target then return end
 
-            local speed = 0.2
+            local speed
+            if distance > 100 then
+                speed = 0.05 -- Very slow if far away (reduces detection risk)
+            elseif distance > 50 then
+                speed = 0.1 -- Medium speed for medium distances
+            else
+                speed = 0.2 -- Fast when close
+            end
 
             while (humanoidRootPart.Position - target.Position).Magnitude > 2 do
                 if not running then return end
@@ -117,9 +124,9 @@ local Toggle = MainTab:CreateToggle({
             if not character then return end
 
             while running do
-                local closestCoin = getClosestCoin()
+                local closestCoin, distance = getClosestCoin()
                 if closestCoin then
-                    moveToCoin(closestCoin)
+                    moveToCoin(closestCoin, distance)
                     task.wait(0.25)
                 else
                     task.wait(3)
