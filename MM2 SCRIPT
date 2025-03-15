@@ -48,7 +48,7 @@ Rayfield:Notify({
 local MainTab = Window:CreateTab("Home")
 local AutoSection = MainTab:CreateSection("Auto Farm")
 
--- Creates Coin Autfarm
+-- Creates Coin Autofarm
 
 local Toggle = MainTab:CreateToggle({
     Name = "AutoCoin",
@@ -87,13 +87,13 @@ local Toggle = MainTab:CreateToggle({
             return closestCoin
         end
 
-        local function teleportToCoin(target)
+        local function moveToCoin(target)
             local character = player.Character
             if not character then return end
 
             local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
             if humanoidRootPart and target and target.Parent then
-                humanoidRootPart.CFrame = target.CFrame + Vector3.new(0, 2, 0)
+                humanoidRootPart.Position = target.Position + Vector3.new(0, 2, 0)
             end
         end
 
@@ -101,9 +101,9 @@ local Toggle = MainTab:CreateToggle({
             while running do
                 local closestCoin = getClosestCoin()
                 if closestCoin then
-                    teleportToCoin(closestCoin)
+                    moveToCoin(closestCoin)
                 end
-                task.wait() -- Ensure immediate looping without artificial delay
+                task.wait(0.01) -- Fast loop execution
             end
         end)
 
@@ -114,7 +114,6 @@ local Toggle = MainTab:CreateToggle({
         end)
     end
 })
-
 
 local TpSection = MainTab:CreateSection("Misc")
 
