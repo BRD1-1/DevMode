@@ -87,7 +87,6 @@ local Toggle = MainTab:CreateToggle({
             local function teleportToCoin(target)
                 if not target or not target.Parent then return end
                 humanoidRootPart.CFrame = target.CFrame + Vector3.new(0, 2, 0)
-                task.wait(0.1)
             end
  
             task.spawn(function()
