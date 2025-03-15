@@ -50,6 +50,7 @@ local AutoSection = MainTab:CreateSection("Auto Farm")
 
 -- Creates Coin Autofarm
 
+```lua
 local Toggle = MainTab:CreateToggle({
     Name = "AutoCoin",
     CurrentValue = false,
@@ -111,14 +112,12 @@ local Toggle = MainTab:CreateToggle({
                 speed = 0.2
             end
 
-            local initialPosition = humanoidRootPart.Position
             local timeout = 0
 
             while (humanoidRootPart.Position - target.Position).Magnitude > 2 do
                 if not running then return end
                 noclip()
                 humanoidRootPart.CFrame = humanoidRootPart.CFrame:Lerp(CFrame.new(target.Position + Vector3.new(0, 3, 0)), speed)
-                task.wait()
 
                 timeout = timeout + 1
                 if timeout > 100 then break end
@@ -138,12 +137,7 @@ local Toggle = MainTab:CreateToggle({
             while running do
                 local closestCoin, distance = getClosestCoin()
                 if closestCoin then
-                    local success = moveToCoin(closestCoin, distance)
-                    if success then
-                        task.wait(0.25)
-                    end
-                else
-                    task.wait(3)
+                    moveToCoin(closestCoin, distance)
                 end
             end
         end
@@ -159,7 +153,7 @@ local Toggle = MainTab:CreateToggle({
         end)
     end
 })
-
+```
 local TpSection = MainTab:CreateSection("Misc")
 
 local button = MainTab:CreateButton({
