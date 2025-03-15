@@ -160,9 +160,6 @@ local button = MainTab:CreateButton({
     end
 })
 
-local MovTab = Window:CreateTab("Movement")
-local AutoSection = MovTab:CreateSection("Walkspeed")
-
 local DetTab = Window:CreateTab("Detection & Callout")
 
 local DetSection = DetTab:CreateSection("Detection")
