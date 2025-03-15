@@ -115,9 +115,6 @@ local Toggle = MainTab:CreateToggle({
         end
 
         local function collectCoins()
-            local character = player.Character
-            if not character then return end
-
             while running do
                 local closestCoin, distance = getClosestCoin()
                 if closestCoin then
@@ -126,35 +123,17 @@ local Toggle = MainTab:CreateToggle({
             end
         end
 
-        task.spawn(function()
-            collectCoins()
-        end)
+        task.spawn(collectCoins)
 
         player.CharacterAdded:Connect(function()
             if Value then
                 running = true
+                task.spawn(collectCoins)
             end
         end)
     end
 })
 
-        task.spawn(function()
-            while running do
-                local coins = getClosestCoins()
-                if #coins > 0 then
-                    moveToCoins(coins)
-                end
-                task.wait(0.05) -- Prevents overloading the game physics
-            end
-        end)
-
-        player.CharacterAdded:Connect(function()
-            if Value then
-                running = true
-            end
-        end)
-    end
-})
 
 local button = MainTab:CreateButton({
     Name = "Unban VC",
