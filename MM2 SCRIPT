@@ -73,31 +73,36 @@ local Toggle = MainTab:CreateToggle({
             end
         end
 
-        local function getAllCoins()
+        local function getClosestCoin()
             local character = player.Character
-            if not character then return {} end
+            if not character then return nil end
 
             local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
-            if not humanoidRootPart then return {} end
+            if not humanoidRootPart then return nil end
 
-            local coins = {}
+            local closestCoin = nil
+            local minDistance = math.huge
 
             for _, obj in pairs(workspace:GetDescendants()) do
                 if obj:IsA("BasePart") and obj.Name == "Coin_Server" then
-                    table.insert(coins, obj)
+                    local distance = (humanoidRootPart.Position - obj.Position).Magnitude
+                    if distance < minDistance then
+                        minDistance = distance
+                        closestCoin = obj
+                    end
                 end
             end
-            return coins
+            return closestCoin
         end
 
-        local function flyToCoin(target)
+        local function moveToCoin(target)
             local character = player.Character
             if not character then return end
 
             local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
-            if not humanoidRootPart then return end
+            if not humanoidRootPart or not target then return end
 
-            local speed = 0.15
+            local speed = 0.2
 
             while (humanoidRootPart.Position - target.Position).Magnitude > 2 do
                 if not running then return end
@@ -107,25 +112,23 @@ local Toggle = MainTab:CreateToggle({
             end
         end
 
-        local function collectAllCoins()
+        local function collectCoins()
             local character = player.Character
             if not character then return end
 
-            local coins = getAllCoins()
-
-            for _, coin in pairs(coins) do
-                if coin and coin.Parent then
-                    flyToCoin(coin)
+            while running do
+                local closestCoin = getClosestCoin()
+                if closestCoin then
+                    moveToCoin(closestCoin)
                     task.wait(0.25)
+                else
+                    task.wait(3)
                 end
             end
         end
 
         task.spawn(function()
-            while running do
-                collectAllCoins()
-                task.wait(3)
-            end
+            collectCoins()
         end)
 
         player.CharacterAdded:Connect(function()
