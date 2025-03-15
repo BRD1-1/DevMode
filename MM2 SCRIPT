@@ -163,23 +163,6 @@ local button = MainTab:CreateButton({
 local MovTab = Window:CreateTab("Movement")
 local AutoSection = MovTab:CreateSection("Walkspeed")
 
-local Slider = MovTab:CreateSlider({
-    Name = "WalkSpeed Changer",
-    Range = {0, 100},
-    Increment = 10,
-    Suffix = "Speed",
-    CurrentValue = 10,
-    Flag = "WalkSpeedSlider",
-    Callback = function(Value)
-       local player = game.Players.LocalPlayer
-       if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-          local hrp = player.Character.HumanoidRootPart
-          hrp.CFrame = hrp.CFrame + hrp.CFrame.LookVector * (Value / 10)
-       end
-    end,
- })
- 
-
 local DetTab = Window:CreateTab("Detection & Callout")
 
 local DetSection = DetTab:CreateSection("Detection")
