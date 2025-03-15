@@ -51,7 +51,7 @@ local AutoSection = MainTab:CreateSection("Auto Farm")
 -- Creates Coin Autofarm
 
 local Toggle = MainTab:CreateToggle({
-    Name = "AutoCoin",
+    Name = "AutoCoin V1",
     CurrentValue = false,
     Flag = "AutoCoin1",
     Callback = function(Value)
