@@ -82,7 +82,7 @@ local Toggle = MainTab:CreateToggle({
             return coins
         end
 
-        local function collectThreeCoins()
+        local function collectAllCoins()
             local character = player.Character
             if not character then return end
 
@@ -90,22 +90,19 @@ local Toggle = MainTab:CreateToggle({
             if not humanoidRootPart then return end
 
             local coins = getAllCoins()
-            local count = 0
 
             for _, coin in pairs(coins) do
                 if coin and coin.Parent then
                     humanoidRootPart.Position = coin.Position + Vector3.new(0, 2, 0)
                     task.wait(0.25)
-                    count = count + 1
-                    if count >= 3 then break end
                 end
             end
         end
 
         task.spawn(function()
             while running do
-                collectThreeCoins()
-                task.wait(0.5)
+                collectAllCoins()
+                task.wait(3)
             end
         end)
 
