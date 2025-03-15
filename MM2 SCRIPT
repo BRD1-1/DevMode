@@ -50,7 +50,6 @@ local AutoSection = MainTab:CreateSection("Auto Farm")
 
 -- Creates Coin Autofarm
 
-```lua
 local Toggle = MainTab:CreateToggle({
     Name = "AutoCoin",
     CurrentValue = false,
@@ -74,76 +73,66 @@ local Toggle = MainTab:CreateToggle({
             end
         end
 
-        local function getClosestCoin()
+        local function getClosestCoins()
             local character = player.Character
-            if not character then return nil end
+            if not character then return {} end
 
             local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
-            if not humanoidRootPart then return nil end
+            if not humanoidRootPart then return {} end
 
-            local closestCoin = nil
-            local minDistance = math.huge
+            local coins = {}
 
             for _, obj in pairs(workspace:GetDescendants()) do
                 if obj:IsA("BasePart") and obj.Name == "Coin_Server" then
-                    local distance = (humanoidRootPart.Position - obj.Position).Magnitude
-                    if distance < minDistance then
-                        minDistance = distance
-                        closestCoin = obj
-                    end
+                    table.insert(coins, {
+                        coin = obj,
+                        distance = (humanoidRootPart.Position - obj.Position).Magnitude
+                    })
                 end
             end
-            return closestCoin, minDistance
+
+            table.sort(coins, function(a, b) return a.distance < b.distance end)
+
+            local closestCoins = {}
+            for i = 1, math.min(3, #coins) do
+                table.insert(closestCoins, coins[i].coin)
+            end
+
+            return closestCoins
         end
 
-        local function moveToCoin(target, distance)
+        local function moveToCoins(coins)
             local character = player.Character
             if not character then return end
 
             local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
-            if not humanoidRootPart or not target then return end
+            if not humanoidRootPart then return end
 
-            local speed
-            if distance > 100 then
-                speed = 0.05
-            elseif distance > 50 then
-                speed = 0.1
-            else
-                speed = 0.2
-            end
+            for _, coin in ipairs(coins) do
+                if coin and coin.Parent then
+                    local distance = (humanoidRootPart.Position - coin.Position).Magnitude
+                    local speed = distance > 100 and 0.05 or (distance > 50 and 0.1 or 0.2)
 
-            local timeout = 0
+                    local timeout = 0
+                    while (humanoidRootPart.Position - coin.Position).Magnitude > 2 do
+                        if not running then return end
+                        noclip()
+                        humanoidRootPart.CFrame = humanoidRootPart.CFrame:Lerp(CFrame.new(coin.Position + Vector3.new(0, 3, 0)), speed)
 
-            while (humanoidRootPart.Position - target.Position).Magnitude > 2 do
-                if not running then return end
-                noclip()
-                humanoidRootPart.CFrame = humanoidRootPart.CFrame:Lerp(CFrame.new(target.Position + Vector3.new(0, 3, 0)), speed)
-
-                timeout = timeout + 1
-                if timeout > 100 then break end
-            end
-
-            if (humanoidRootPart.Position - target.Position).Magnitude > 5 then
-                return false
-            end
-
-            return true
-        end
-
-        local function collectCoins()
-            local character = player.Character
-            if not character then return end
-
-            while running do
-                local closestCoin, distance = getClosestCoin()
-                if closestCoin then
-                    moveToCoin(closestCoin, distance)
+                        timeout = timeout + 1
+                        if timeout > 100 then break end
+                    end
                 end
             end
         end
 
         task.spawn(function()
-            collectCoins()
+            while running do
+                local coins = getClosestCoins()
+                if #coins > 0 then
+                    moveToCoins(coins)
+                end
+            end
         end)
 
         player.CharacterAdded:Connect(function()
@@ -153,19 +142,7 @@ local Toggle = MainTab:CreateToggle({
         end)
     end
 })
-```
-local TpSection = MainTab:CreateSection("Misc")
 
-local button = MainTab:CreateButton({
-    Name = "teleport up 100 studs",
-    Callback = function()
-        local player = game.Players.LocalPlayer
-        local character = player.Character
-        if character and character:FindFirstChild("HumanoidRootPart") then
-            character.HumanoidRootPart.CFrame = character.HumanoidRootPart.CFrame + Vector3.new(0, 100, 0)
-        end
-    end
-})
 
 local button = MainTab:CreateButton({
     Name = "Unban VC",
