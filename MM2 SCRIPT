@@ -55,65 +55,66 @@ local Toggle = MainTab:CreateToggle({
     CurrentValue = false,
     Flag = "AutoCoin1",
     Callback = function(Value)
-         Rayfield:Notify({
-          Title = "Auto Coin " .. (Value and "Enabled" or "Disabled"),
-          Content = Value and "If you are AFKing, we recommend using a white screen to reduce lag." or "Auto Coin has been disabled.",
-          Duration = 6.5,
-          Image = "coins",
-          })
- 
+        Rayfield:Notify({
+            Title = "Auto Coin " .. (Value and "Enabled" or "Disabled"),
+            Content = Value and "If you are AFKing, we recommend using a white screen to reduce lag." or "Auto Coin has been disabled.",
+            Duration = 6.5,
+            Image = "coins",
+        })
+
         local player = game.Players.LocalPlayer
- 
-        local function startAutoCoin()
-            local character = player.Character or player.CharacterAdded:Wait()
-            local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-            local running = true  
- 
-            local function getClosestCoin()
-                local closestCoin = nil
-                local minDistance = math.huge
-                for _, obj in pairs(workspace:GetDescendants()) do
-                    if obj:IsA("BasePart") and obj.Name == "Coin_Server" then
-                        local distance = (humanoidRootPart.Position - obj.Position).Magnitude
-                        if distance < minDistance then
-                            minDistance = distance
-                            closestCoin = obj
-                        end
+        local running = Value
+
+        local function getClosestCoin()
+            local character = player.Character
+            if not character then return nil end
+
+            local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+            if not humanoidRootPart then return nil end
+
+            local closestCoin
+            local minDistance = math.huge
+
+            for _, obj in pairs(workspace:GetDescendants()) do
+                if obj:IsA("BasePart") and obj.Name == "Coin_Server" then
+                    local distance = (humanoidRootPart.Position - obj.Position).Magnitude
+                    if distance < minDistance then
+                        minDistance = distance
+                        closestCoin = obj
                     end
                 end
-                return closestCoin
             end
- 
-            local function teleportToCoin(target)
-                if not target or not target.Parent then return end
+            return closestCoin
+        end
+
+        local function teleportToCoin(target)
+            local character = player.Character
+            if not character then return end
+
+            local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+            if humanoidRootPart and target and target.Parent then
                 humanoidRootPart.CFrame = target.CFrame + Vector3.new(0, 2, 0)
             end
- 
-            task.spawn(function()
-                while Value do 
-                    if not running then return end
- 
-                    local closestCoin = getClosestCoin()
-                    if closestCoin then
-                        teleportToCoin(closestCoin)
-                    end
-                end
-            end)
- 
-            if not Value then
-                running = false
-            end
         end
- 
-        startAutoCoin()
- 
+
+        task.spawn(function()
+            while running do
+                local closestCoin = getClosestCoin()
+                if closestCoin then
+                    teleportToCoin(closestCoin)
+                end
+                task.wait() -- Ensure immediate looping without artificial delay
+            end
+        end)
+
         player.CharacterAdded:Connect(function()
             if Value then
-                startAutoCoin()
+                running = true
             end
         end)
     end
- }) 
+})
+
 
 local TpSection = MainTab:CreateSection("Misc")
 
